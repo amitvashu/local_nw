@@ -2,152 +2,431 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local File Share</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e0f7fa, #ffffff);
-            color: #333;
         }
-
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #37474F;
+            background: linear-gradient(135deg, #e0f7fa, #B2EBF2);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
         header {
-            background-color: #009688;
+            background: linear-gradient(135deg, #00BCD4, #0097A7);
             color: white;
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease forwards;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
+        header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
         }
-
+        
+        .icon-pulse {
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
         main {
             max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
+            margin: 0 auto 80px;
+            padding: 30px;
             background-color: white;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease forwards;
         }
-
+        
+        main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #00BCD4, #FF4081);
+        }
+        
+        main:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
         h2 {
-            color: #009688;
-            margin-bottom: 20px;
+            color: #0097A7;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            position: relative;
+            display: inline-block;
         }
-
-        form {
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background-color: #FF4081;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        h2:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .section {
             margin-bottom: 40px;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 0.5s;
+            opacity: 0;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .upload-area {
+            border: 2px dashed #00BCD4;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            background-color: rgba(224, 247, 250, 0.5);
+        }
+        
+        .upload-area:hover {
+            background-color: rgba(224, 247, 250, 0.8);
+            border-color: #FF4081;
+        }
+        
         input[type="file"] {
-            padding: 10px;
-            margin-bottom: 10px;
+            display: none;
         }
-
-        input[type="submit"] {
-            background-color: #009688;
+        
+        .file-input-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #00BCD4, #0097A7);
+            color: white;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 151, 167, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .file-input-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 151, 167, 0.4);
+        }
+        
+        .file-name {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #37474F;
+            min-height: 20px;
+        }
+        
+        .upload-button {
+            background: linear-gradient(45deg, #FF4081, #F50057);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 30px;
             font-size: 16px;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 64, 129, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
         }
-
-        input[type="submit"]:hover {
-            background-color: #00796b;
+        
+        .upload-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.7s ease;
         }
-
-        ul {
+        
+        .upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 64, 129, 0.4);
+        }
+        
+        .upload-button:hover::before {
+            left: 100%;
+        }
+        
+        .files-list {
             list-style: none;
             padding: 0;
         }
-
-        ul li {
-            margin: 12px 0;
-            background-color: #f1f1f1;
-            padding: 12px 18px;
-            border-radius: 8px;
-            text-align: left;
-            transition: transform 0.2s, background-color 0.2s;
+        
+        .file-item {
+            margin: 15px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease forwards;
+            animation-delay: calc(0.1s * var(--i, 0));
+            opacity: 0;
+            transform: translateX(-20px);
         }
-
-        ul li:hover {
-            background-color: #e0f2f1;
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .file-item:hover {
             transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
-
-        ul li a {
-            color: #00796b;
+        
+        .file-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #37474F;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
+            font-weight: 500;
+            font-size: 1rem;
+            background-color: #F5F5F5;
+            transition: background-color 0.3s ease;
         }
-
-        ul li a:hover {
-            text-decoration: underline;
+        
+        .file-link:hover {
+            background-color: #E0F7FA;
         }
-
+        
+        .file-icon {
+            margin-right: 15px;
+            color: #00BCD4;
+            font-size: 1.5rem;
+        }
+        
         footer {
             text-align: center;
-            margin-top: 40px;
-            color: #777;
-            font-size: 14px;
-            padding: 20px;
+            padding: 30px 20px;
+            background-color: #263238;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            margin-top: 50px;
+            animation: fadeIn 1s ease forwards;
         }
-
-        @media screen and (max-width: 600px) {
+        
+        footer p {
+            margin: 5px 0;
+        }
+        
+        .footer-pulse {
+            display: inline-block;
+            animation: footerPulse 3s infinite;
+        }
+        
+        @keyframes footerPulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
             main {
+                padding: 20px;
                 margin: 20px;
-                padding: 15px;
             }
-
-            input[type="submit"] {
-                width: 100%;
-            }
-
-            ul li {
-                font-size: 14px;
+            
+            .upload-area {
+                padding: 20px 15px;
             }
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1><span class="icon-pulse">🌐</span> Local File Share</h1>
+        <p>Share files seamlessly across your local network with style</p>
+    </header>
+    
+    <main>
+        <section class="section upload-section">
+            <h2>📤 Upload a File</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data" id="upload-form">
+                <div class="upload-area" id="drop-area">
+                    <label for="file-input" class="file-input-button">Choose File</label>
+                    <input type="file" name="file" id="file-input" required>
+                    <div class="file-name" id="file-name">No file chosen</div>
+                </div>
+                <center>
+                    <button type="submit" class="upload-button">
+                        Upload File
+                    </button>
+                </center>
+            </form>
+        </section>
+        
+        <section class="section download-section">
+            <h2>📥 Download Files</h2>
+            <ul class="files-list" id="files-list">
+                {% for file in files %}
+                <li class="file-item" style="--i: {{ loop.index }}">
+                    <a href="{{ url_for('download_file', filename=file) }}" class="file-link">
+                        <span class="file-icon">📄</span>
+                        {{ file }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; {{ year }} LocalShare. All rights reserved.</p>
+        <p class="footer-pulse">✨ Fast. Secure. Beautiful. ✨</p>
+    </footer>
 
-<header>
-    <h1>🌐 Local File Share</h1>
-    <p>Share files easily on your local network</p>
-</header>
-
-<main>
-    <h2>📤 Upload a File</h2>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required><br><br>
-        <input type="submit" value="Upload">
-    </form>
-
-    <h2>📥 Download Files</h2>
-    <ul>
-        {% for file in files %}
-            <li><a href="{{ url_for('download_file', filename=file) }}">{{ file }}</a></li>
-        {% endfor %}
-    </ul>
-</main>
-
-<footer>
-    &copy; {{ year }} LocalShare. All rights reserved. ✨
-</footer>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('file-input');
+            const fileName = document.getElementById('file-name');
+            const dropArea = document.getElementById('drop-area');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileName.textContent = this.files[0].name;
+                    fileName.style.fontWeight = '600';
+                    fileName.style.color = '#0097A7';
+                } else {
+                    fileName.textContent = 'No file chosen';
+                    fileName.style.fontWeight = 'normal';
+                    fileName.style.color = '#37474F';
+                }
+            });
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.style.borderColor = '#FF4081';
+                dropArea.style.backgroundColor = 'rgba(224, 247, 250, 0.8)';
+                dropArea.style.transform = 'scale(1.02)';
+            }
+            
+            function unhighlight() {
+                dropArea.style.borderColor = '#00BCD4';
+                dropArea.style.backgroundColor = 'rgba(224, 247, 250, 0.5)';
+                dropArea.style.transform = 'scale(1)';
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    fileName.textContent = files[0].name;
+                    fileName.style.fontWeight = '600';
+                    fileName.style.color = '#0097A7';
+                }
+            }
+            
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach((item, index) => {
+                item.style.setProperty('--i', index + 1);
+            });
+        });
+    </script>
 </body>
 </html>
